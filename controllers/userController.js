@@ -38,8 +38,53 @@ const userController={
     },
 
     //update user
-    
-    //add friend
+    updateUser({params,body},res){
+        User.findOneAndUpdate(
+            {
+                _id:params.id
+            },
+            body,
+            {
+                new:true,
+                runValidators:true
+            }
+        )
+        .then(userData=>{
+            if(!userData){
+                res.status(404).json(
+                    {
+                        message:`No user found matching id:${params.id}`
+                    }
+                );
+                return;
+            }
+            res.json(userData);
+        })
+        .catch(err=>res.json(err));
+    },
 
+    //delete a user
+    deleteUser({params},res){
+        User.findOneAndDelete(
+            {
+                _id:params.id
+            }
+        )
+        .then(userData=>{
+            if(!userData){
+                res.status(404).json(
+                    {
+                        message:`No user found matching id:${params.id}`
+                    }
+                );
+                return;
+            }
+            res.json(userData);
+        })
+        .catch(err=>res.status(400).json(err));
+    },
+
+    //add friend
+    
     //delete friend
 }
