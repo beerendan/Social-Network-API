@@ -1,3 +1,4 @@
+const { error } = require('console');
 const {User}=require('../models');
 
 const userController={
@@ -85,6 +86,55 @@ const userController={
     },
 
     //add friend
-    
+    addFriend({params},res){
+        User.findOneAndUpdate(
+            {
+                _id:params.id
+            },
+            {
+                $push:
+                {
+                    friends:params.friendId
+                }
+            },
+            {
+                new:true,
+                runValidators:true
+            }
+        )
+        .then(userData=>{
+            if(!userData){
+                res.status(404).json(
+                    {
+                        message:`No user found matching the id:${params.friendId}`
+                    }
+                );
+                return;
+            }
+            res.json(userData);
+        })
+        .catch(err=>res.json(err));
+    },
+
     //delete friend
-}
+    deleteFriend({params},res){
+        User.findOneAndUpdate(
+            {
+                _id:params.userId
+            },
+            {
+                $pull:
+                {
+                    friends:params.friendId
+                }
+            },
+            {
+                new:true
+            }
+        )
+        .then(userData=>res.json(userData))
+        .catch(err=>res.json(err))
+    }
+};
+
+module.exports=userController;
