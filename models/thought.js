@@ -3,13 +3,13 @@ const {Schema, model, Types}=require('mongoose');
 
 //schema setup for mongoose
 const thoughtSchema=new Schema({
-    content:{
+    thoughtText:{
         type:String,
         minlength:1,
         maxlength:240,
         required:true
     },
-    postTime:{
+    createdAt:{
         type:Date,
         default:Date.now,
         get:(postDate)=>{
@@ -37,7 +37,7 @@ const reactionSchema=new Schema({
         type:Schema.Types.ObjectId,
         default:()=> new Types.ObjectId()
     },
-    content:{
+    reactionBody:{
         type:String,
         minlength:1,
         maxlength:240,
@@ -48,7 +48,7 @@ const reactionSchema=new Schema({
         type:String,
         required:true,
     },
-    reactionTime:{
+    createdAt:{
         type:Date,
         default:Date.now,
         get: reactionDate=>{
@@ -63,7 +63,7 @@ const reactionSchema=new Schema({
 
 //Object definition and reaction count
 const Thought=model('thought',thoughtSchema);
-thoughtSchema.virtual('totalReacts').get(()=>{
-return this.reaction.length});
+thoughtSchema.virtual('reactionCount').get(()=>{
+return this.reactions.length});
 
 module.exports=Thought;
