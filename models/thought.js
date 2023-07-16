@@ -1,6 +1,35 @@
 const moment=require('moment');
 const {Schema, model, Types}=require('mongoose');
 
+const reactionSchema=new Schema({
+    reactionId:{
+        type:Schema.Types.ObjectId,
+        default:()=> new Types.ObjectId()
+    },
+    reactionBody:{
+        type:String,
+        minlength:1,
+        maxlength:240,
+        required:true,
+        trim:true,
+    },
+    username:{
+        type:String,
+        required:true,
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now,
+        get: reactionDate=>{
+            moment(reactionDate).format('MMM DD, YYYY [at] hh:mm a');
+        }
+    }
+
+},{
+    toJSON:{getters:true},
+    id:false
+});
+
 //schema setup for mongoose
 const thoughtSchema=new Schema({
     thoughtText:{
@@ -32,34 +61,6 @@ const thoughtSchema=new Schema({
     id:false
 });
 
-const reactionSchema=new Schema({
-    reactionId:{
-        type:Schema.Types.ObjectId,
-        default:()=> new Types.ObjectId()
-    },
-    reactionBody:{
-        type:String,
-        minlength:1,
-        maxlength:240,
-        required:true,
-        trim:true,
-    },
-    username:{
-        type:String,
-        required:true,
-    },
-    createdAt:{
-        type:Date,
-        default:Date.now,
-        get: reactionDate=>{
-            moment(reactionDate).format('MMM DD, YYYY [at] hh:mm a');
-        }
-    }
-
-},{
-    toJSON:{getters:true},
-    id:false
-});
 
 //Object definition and reaction count
 const Thought=model('thought',thoughtSchema);
