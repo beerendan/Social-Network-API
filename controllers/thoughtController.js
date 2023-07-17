@@ -68,7 +68,7 @@ const thoughtController={
    
     //delete a thought
     deleteThought({params,body}, res){
-        Thought.findOneAndDelete({_id:params})
+        Thought.findOneAndDelete({id:params._id})
         .then(deletedThought=>{
             if(!deletedThought){
                 return res.status(404).json({
@@ -112,7 +112,7 @@ const thoughtController={
     deleteReaction({params,body},res){
         Thought.findOneAndUpdate(
             {
-                _id:params.thoughtId
+                id:params.thoughtId
             },
             {
             $pull:
