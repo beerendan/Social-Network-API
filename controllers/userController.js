@@ -89,7 +89,7 @@ const userController={
     addFriend({params},res){
         User.findOneAndUpdate(
             {
-                _id:params.id
+                id:params._id
             },
             {
                 $push:

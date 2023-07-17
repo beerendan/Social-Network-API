@@ -1,6 +1,6 @@
 //import dependencies
 const express=require('express');
-const mongo=require('mongoose');
+const db=require('./config/connection');
 
 //app setup
 const app=express();
@@ -10,12 +10,9 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(require('./routes'));
 
-//mongoose setup
-mongo.connect(
-    process.env.MONGODB_URI ||'mongodb://localhost:27017', {
-        useNewUrlParser: true,
-        useUnifiedTopology:true,
-    }
-);
-app.listen(PORT,()=>
-console.log(`Listening on ${PORT}`));
+//server setup
+db.once('open',()=>{
+    app.listen(PORT,()=>{
+      console.log(`Server active on port ${PORT}`);
+    });
+});

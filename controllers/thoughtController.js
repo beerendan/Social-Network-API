@@ -1,7 +1,6 @@
-const { REFUSED } = require('dns');
 const {Thought, User}=require('../models');
 
-const thoughtControl={
+const thoughtController={
    
     //for all thoughts
     getAllThoughts(req,res){
@@ -13,7 +12,7 @@ const thoughtControl={
   
     //for one thought
     getOneThought({params}, res){
-        Thought.findOne({_id:params._id}).select('-__v')
+        Thought.findOne({id:params._id}).select('-__v')
         .sort({_id:-1})
         .then(thoughtData=>res.json(thoughtData))
         .catch(err=>{
@@ -51,7 +50,7 @@ const thoughtControl={
    
     //update a thought
     updateThought({params,body},res){
-        Thought.findOneAndUpdate({_id:params.id},
+        Thought.findOneAndUpdate({id:params._id},
             body,{
                 new:true,
                 runValidators:true
@@ -132,4 +131,4 @@ const thoughtControl={
     }
 };
 
-module.exports=thoughtControl;
+module.exports=thoughtController;
